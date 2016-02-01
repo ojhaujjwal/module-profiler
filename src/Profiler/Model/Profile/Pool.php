@@ -11,6 +11,9 @@ class Pool
         $this->profiles = $profiles;
     }
 
+    /**
+     * @return ProfileInterface[]
+     */
     public function getProfiles()
     {
         return $this->profiles;

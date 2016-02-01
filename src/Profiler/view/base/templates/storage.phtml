@@ -1,0 +1,11 @@
+<?php $list = $this->getList() ?>
+
+<table>
+    <?php foreach ($list as $file => $meta): ?>
+        <tr>
+            <td><a href="<?= $this->getUrl('profiler/index/view', ['_query' => ['file' => $file]]) ?>">
+                    <?= $meta['url'] ?></a></td>
+            <td><?= date('d.m.Y H:i:s', $meta['time']) ?></td>
+        </tr>
+    <?php endforeach ?>
+</table>

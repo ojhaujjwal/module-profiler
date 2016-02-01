@@ -1,17 +1,21 @@
 {
   "name": "mirasvit/module-profiler",
-  "description": "Profiler",
+  "description": "Magento 2 Profiler Module",
   "require": {
     "php": "~5.5.0|~5.6.0|~7.0.0",
-    "magento/module-store": "100.0.*",
-    "magento/module-backend": "100.0.*",
     "magento/framework": "100.0.*",
     "jdorn/sql-formatter": "^1.2"
   },
   "type": "magento2-module",
   "version": "100.0.0-aplha1",
   "license": [
-    "proprietary"
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Mirasvit"
+    }
   ],
   "autoload": {
     "files": [
