@@ -1,7 +1,6 @@
 <?php
 /** @var \Mirasvit\Profiler\Block\Tab\Profiler $block */
-
-$stat = $block->getStat();
+$profile = $block->getProfile();
 
 /** @var \Mirasvit\Profiler\Helper\Format $format */
 $format = $this->helper('Mirasvit\Profiler\Helper\Format');
@@ -21,18 +20,18 @@ $format = $this->helper('Mirasvit\Profiler\Helper\Format');
     </thead>
     <tbody>
     <?php $idx = 0 ?>
-    <?php foreach ($stat->getFilteredTimerIds() as $timerId): ?>
+    <?php foreach ($profile->getTimers() as $timerId => $timer): ?>
         <tr data-tt-id="<?= $timerId ?>" data-tt-parent-id="<?= $this->getParentTimerId($timerId) ?>"
-            data-threshold-value="<?= $stat->fetch($timerId, 'sum') * 1000 ?>">
+            data-threshold-value="<?= $timer['sum'] * 1000 ?>">
             <td>
-                <?= $this->renderTimerId($stat->fetch($timerId, 'id')) ?>
+                <?= $this->renderTimerId($timerId) ?>
             </td>
             <td class="number">
-                <?= $format->formatTime($stat->fetch($timerId, 'sum')) ?>
-                <div class="timer-line" style="width: <?= $block->getTimerLength($timerId) ?>%;"></div>
+                <?= $format->formatTime($timer['sum']) ?>
+                <div class="timer-line" style="width: 0%;"></div>
             </td>
-            <td class="number"><?= $format->formatTime($stat->fetch($timerId, 'avg')) ?></td>
-            <td class="number"><?= $stat->fetch($timerId, 'count') ?></td>
+            <td class="number"><?= $format->formatTime($timer['sum'] / $timer['count']) ?></td>
+            <td class="number"><?= $timer['count'] ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>
@@ -44,44 +43,4 @@ $format = $this->helper('Mirasvit\Profiler\Helper\Format');
     ], function ($) {
         $('#profiler-table').profilerTable({});
     });
-    //    require([
-    //        'jquery',
-    //        'jquery/ui',
-    //        'Mirasvit_Profiler/js/lib/jquery.treetable',
-    //        'Mirasvit_Profiler/js/lib/jquery.tablesorter',
-    //        'Mirasvit_Profiler/js/lib/jquery.filtertable'
-    //    ], function ($) {
-    //        var $table = $('#profiler-table');
-    //        $table.treetable({expandable: true});
-    //        $table.tablesorter({});
-    //
-    //        $table.filterTable({
-    //            callback: function (term, table) {
-    //                $table.treetable('expandAll');
-    //            }
-    //        });
-    //
-    //        $table.bind("sortStart", function () {
-    //            $table.treetable('expandAll');
-    //        });
-    //
-    //        $('#profiler-threshold').slider({
-    //            min: 0,
-    //            value: 0,
-    //            max: <?//=$block->getTotalTime() * 1000 ?>//,
-    //            slide: function (event, ui) {
-    //                $table.treetable('expandAll');
-    //                $('[data-filtrable]', $table).each(function (i, td) {
-    //                    var value = $(td).attr('data-filtrable');
-    //                    if (value > ui.value) {
-    //                        $(td).parent().show();
-    //                    } else {
-    //                        $(td).parent().hide();
-    //                    }
-    //                });
-    //
-    //                $("#profiler-threshold .value").html(ui.value + " ms");
-    //            }
-    //        });
-    //    });
 </script>

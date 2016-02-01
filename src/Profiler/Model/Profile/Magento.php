@@ -1,19 +1,23 @@
 <?php
 namespace Mirasvit\Profiler\Model\Profile;
 
-class Magento implements ProfileInterface
+class Magento extends AbstractProfile
 {
     /**
      * {@inheritdoc}
      */
     public function dump()
     {
-        $dump = [];
         foreach ($this->getStat()->getFilteredTimerIds() as $timerId) {
-            $dump[$timerId] = $this->getStat()->get($timerId);
+            $this->data[$timerId] = $this->getStat()->get($timerId);
         }
 
-        return $dump;
+        return $this->data;
+    }
+
+    public function getTimers()
+    {
+        return $this->data;
     }
 
     /**

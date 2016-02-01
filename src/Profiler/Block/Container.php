@@ -49,18 +49,10 @@ class Container extends Template
     }
 
     /**
-     * @return int
+     * @return \Mirasvit\Profiler\Model\Profile\Database
      */
-    public function getDbTotalNumQueries()
+    public function getDatabaseProfile()
     {
-        return $this->context->getDbProfiler()->getTotalNumQueries();
-    }
-
-    /**
-     * @return int
-     */
-    public function getDbTotalElapsedSecs()
-    {
-        return $this->context->getDbProfiler()->getTotalElapsedSecs();
+        return $this->context->getDatabaseProfile();
     }
 }

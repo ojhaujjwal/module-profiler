@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="empty">
     <body>
         <referenceContainer name="content">
-            <block name="profiler.storage.view" class="Mirasvit\Profiler\Block\Storage\View" template="storage/view.phtml"/>
+            <block name="profiler.storage.view" class="Mirasvit\Profiler\Block\Storage\View" cacheable="false" template="storage/view.phtml"/>
         </referenceContainer>
     </body>
 </page>

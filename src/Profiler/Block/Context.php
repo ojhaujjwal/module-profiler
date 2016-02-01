@@ -16,36 +16,26 @@ class Context
     protected $resourceConnection;
 
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Mirasvit\Profiler\Model\Profile\Magento $magentoProfile,
+        \Mirasvit\Profiler\Model\Profile\Database $databaseProfile
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->magentoProfile = $magentoProfile;
+        $this->databaseProfile = $databaseProfile;
     }
 
     /**
-     * @param \Magento\Framework\Profiler\Driver\Standard\Stat $stat
-     * @return $this
+     * @return \Mirasvit\Profiler\Model\Profile\Magento
      */
-    public function setProfilerStat($stat)
+    public function getMagentoProfile()
     {
-        $this->profilerStat = $stat;
-
-        return $this;
+        return $this->magentoProfile;
     }
 
     /**
-     * @return \Magento\Framework\Profiler\Driver\Standard\Stat
+     * @return \Mirasvit\Profiler\Model\Profile\Database
      */
-    public function getProfilerStat()
+    public function getDatabaseProfile()
     {
-        return $this->profilerStat;
-    }
-
-    /**
-     * @return \Zend_Db_Profiler
-     */
-    public function getDbProfiler()
-    {
-        return $this->resourceConnection->getConnection('read')
-            ->getProfiler();
+        return $this->databaseProfile;
     }
 }

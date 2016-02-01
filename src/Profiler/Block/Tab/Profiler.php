@@ -30,6 +30,14 @@ class Profiler extends Template implements TabInterface
     }
 
     /**
+     * @return \Mirasvit\Profiler\Model\Profile\Magento
+     */
+    public function getProfile()
+    {
+        return $this->context->getMagentoProfile();
+    }
+
+    /**
      * @return \Magento\Framework\Profiler\Driver\Standard\Stat
      */
     public function getStat()

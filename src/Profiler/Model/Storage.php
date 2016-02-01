@@ -3,6 +3,7 @@ namespace Mirasvit\Profiler\Model;
 
 use Symfony\Component\Yaml\Dumper as YamlDumper;
 use Symfony\Component\Yaml\Parser as YamlParser;
+use Magento\Framework\Profiler;
 
 class Storage
 {
@@ -21,40 +22,72 @@ class Storage
     {
         $result = [];
 
-        foreach (glob($this->getPath()."*.meta.yaml") as $filename) {
+        foreach (glob($this->getPath() . "*.meta.yaml") as $filename) {
             $result[$filename] = $this->loadMeta($filename);
         }
 
         return $result;
     }
 
+    /**
+     * @return $this
+     */
     public function dump()
     {
-        $dump = [];
+        Profiler::start(__METHOD__);
+
+        foreach ($this->pool->getProfiles() as $code => $profile) {
+            $profile->dump();
+        }
+
+        Profiler::stop(__METHOD__);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function save()
+    {
+        $filename = microtime(true);
+
+        $dataFile = $this->getPath() . $filename . '.data.yaml';
+        $metaFile = $this->getPath() . $filename . '.meta.yaml';
+
+        $data = [];
         $meta = [
-            'url'  => "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
-            'time' => microtime(true),
+            'url'       => "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
+            'data_file' => $dataFile,
+            'time'      => microtime(true),
         ];
 
         foreach ($this->pool->getProfiles() as $code => $profile) {
-            $dump[$code] = $profile->dump();
-//            $meta[$code] = $profile->meta();
+            $data[$code] = $profile->getData();
+            $meta[$code] = $profile->getMeta();
         }
 
         $dumper = new YamlDumper();
 
-        $filename = microtime(true);
+        file_put_contents($dataFile, $dumper->dump($data, 10));
+        file_put_contents($metaFile, $dumper->dump($meta, 10));
 
-        $file = $this->getPath() . $filename . '.yaml';
-        file_put_contents($file, $dumper->dump($dump, 10));
-
-        $file = $this->getPath() . $filename . '.meta.yaml';
-        file_put_contents($file, $dumper->dump($meta, 10));
+        return $this;
     }
 
-    public function load()
+    public function load($file)
     {
+        $meta = $this->loadMeta($file);
 
+        $dataFile = $meta['data_file'];
+
+        $yaml = file_get_contents($dataFile);
+
+        $data = (new YamlParser())->parse($yaml);
+
+        foreach ($this->pool->getProfiles() as $code => $profile) {
+            $profile->load($meta[$code], $data[$code]);
+        }
     }
 
     /**

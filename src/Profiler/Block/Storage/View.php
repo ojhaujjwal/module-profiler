@@ -21,6 +21,8 @@ class View extends Template
      */
     public function getMeta()
     {
+        $this->storage->load($this->getRequest()->getParam('file'));
+
         return $this->storage->loadMeta($this->getRequest()->getParam('file'));
     }
 }

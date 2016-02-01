@@ -4,6 +4,7 @@ namespace Mirasvit\Profiler\Model\Driver\Output;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Profiler;
 
 class Html implements OutputInterface
 {
@@ -12,6 +13,7 @@ class Html implements OutputInterface
      */
     public function display(Stat $stat)
     {
+        Profiler::start(__METHOD__);
         $objectManager = ObjectManager::getInstance();
 
         /** @var \Mirasvit\Profiler\Model\Config $config */
@@ -24,11 +26,9 @@ class Html implements OutputInterface
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = $objectManager->create('\Magento\Framework\View\LayoutInterface');
 
-        $context = $objectManager->get('\Mirasvit\Profiler\Block\Context');
-        $context->setProfilerStat($stat);
-
         $storage = $objectManager->get('\Mirasvit\Profiler\Model\Storage');
         $storage->dump();
+        $storage->save();
 
         $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 
@@ -36,5 +36,7 @@ class Html implements OutputInterface
             echo $layout->createBlock('\Mirasvit\Profiler\Block\Container')
                 ->toHtml();
         }
+
+        Profiler::stop(__METHOD__);
     }
 }

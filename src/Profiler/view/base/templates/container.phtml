@@ -1,6 +1,8 @@
 <?php
 /** @var \Mirasvit\Profiler\Block\Container $block */
 
+$databaseProfile = $block->getDatabaseProfile();
+
 ?>
 <div class="mirasvit-profiler-clearfix"></div>
 
@@ -22,7 +24,7 @@
 
             <div class="mirasvit-profiler__container-info-item">
                 <i class="fa fa-fw fa-database"></i>
-                <?= $block->getDbTotalNumQueries() ?> in <?= round($block->getDbTotalElapsedSecs() * 1000, 1) ?> ms
+                <?= $databaseProfile->getTotalNumQueries() ?> in <?= round($databaseProfile->getTotalElapsedSecs() * 1000, 1) ?> ms
             </div>
         </div>
     </div>
